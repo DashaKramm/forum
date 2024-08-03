@@ -40,6 +40,14 @@
                     <li class="nav-item">
                         <p class="nav-link"><a href="{% url 'accounts:detail' user.pk %}">{{ request.user.username }}</a></p>
                     </li>
+                    {% if perms.webapp.change_topic or perms.webapp.delete_topic %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'webapp:update_topic' topic.id %}">Редактировать тему</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'webapp:delete_topic' topic.id %}">Удалить тему</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <form action="{% url 'accounts:logout' %}?next={{ request.get_full_path }}" method="post">
                             {% csrf_token %}

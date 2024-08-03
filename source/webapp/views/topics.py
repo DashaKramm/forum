@@ -1,8 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Count
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from webapp.forms import TopicForm, ReplyForm
 from webapp.models import Topic
@@ -35,7 +36,7 @@ class TopicDetailView(DetailView):
     model = Topic
     template_name = 'topics/topic_detail.html'
     context_object_name = 'topic'
-    paginate_by = 1
+    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,3 +49,33 @@ class TopicDetailView(DetailView):
         context['is_paginated'] = page_obj.has_other_pages()
         context['reply_form'] = ReplyForm()
         return context
+
+
+class TopicUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Topic
+    form_class = TopicForm
+    template_name = 'topics/update_topic.html'
+    permission_required = 'webapp.change_topic'
+
+    def has_permission(self):
+        return super().has_permission() or self.request.user == self.get_object().author
+
+    def get_success_url(self):
+        return reverse_lazy('webapp:detailed_topic_view', kwargs={'pk': self.object.topic.pk})
+
+
+class TopicDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Topic
+    template_name = 'topics/delete_topic.html'
+    permission_required = 'webapp.delete_topic'
+
+    def has_permission(self):
+        return super().has_permission() or self.request.user == self.get_object().author
+
+    def get_success_url(self):
+        return reverse('webapp:index')
+
+    def delete(self, request, *args, **kwargs):
+        if not request.POST.get('confirm_delete'):
+            return redirect('webapp:detailed_topic_view', pk=self.object.topic.pk)
+        return super().delete(request, *args, **kwargs)

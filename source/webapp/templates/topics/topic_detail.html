@@ -32,9 +32,13 @@
                                 <p><small>{{ reply.created_at|date:"d M Y H:i" }}</small></p>
                                 <p>{{ reply.content }}</p>
                             </div>
-                            {% if request.user == reply.author %}
+                            {% if perms.webapp.change_reply or request.user == reply.author %}
                                 <div class="ms-3">
                                     <a href="{% url 'webapp:update_reply' reply.id %}" class="btn btn-primary btn-sm">Редактировать</a>
+                                </div>
+                            {% endif %}
+                            {% if perms.webapp.delete_reply or request.user == reply.author %}
+                                <div class="ms-3">
                                     <a href="{% url 'webapp:delete_reply' reply.id %}" class="btn btn-danger btn-sm">Удалить</a>
                                 </div>
                             {% endif %}
