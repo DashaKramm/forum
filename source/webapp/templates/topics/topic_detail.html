@@ -23,9 +23,10 @@
                             <div class="me-3 d-flex flex-column align-items-center">
                                 {% if reply.author.avatar %}
                                     <img src="{{ reply.author.avatar.url }}" alt="{{ reply.author.username }}"
-                                         style="width: 60px; height: 60px; ;">
+                                         style="width: 60px; height: 60px;">
                                 {% endif %}
                                 <a href="#">{{ reply.author.username }}</a>
+                                <p>Сообщений: {{ reply.message_count }}</p>
                             </div>
                             <div class="flex-grow-1">
                                 <p><small>{{ reply.created_at|date:"d M Y H:i" }}</small></p>
@@ -43,6 +44,9 @@
                     <p>Ответов нет</p>
                 {% endfor %}
             </ul>
+            {% if is_paginated %}
+                {% include 'partial/pagination.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}

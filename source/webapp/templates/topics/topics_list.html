@@ -8,34 +8,37 @@
         {% if topics %}
             <table class="table table-striped">
                 <tbody>
-                    {% for topic in topics %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
-                                    {{ topic.title }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
-                                    {{ topic.created_at|date:"d M Y" }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
-                                    {{ topic.author.username }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
-                                    {{ topic.replies_count }}
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                {% for topic in topics %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
+                                {{ topic.title }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
+                                {{ topic.created_at|date:"d M Y" }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
+                                {{ topic.author.username }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
+                                {{ topic.replies_count }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         {% else %}
             <p class="text-center">Темы не найдены.</p>
+        {% endif %}
+        {% if is_paginated %}
+            {% include 'partial/pagination.html' %}
         {% endif %}
     </div>
 {% endblock %}
