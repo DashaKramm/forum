@@ -11,22 +11,22 @@
                     {% for topic in topics %}
                         <tr>
                             <td>
-                                <a href="#" class="text-decoration-none">
+                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
                                     {{ topic.title }}
                                 </a>
                             </td>
                             <td>
-                                <a href="#" class="text-decoration-none">
+                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
                                     {{ topic.created_at|date:"d M Y" }}
                                 </a>
                             </td>
                             <td>
-                                <a href="#" class="text-decoration-none">
+                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
                                     {{ topic.author.username }}
                                 </a>
                             </td>
                             <td>
-                                <a href="#" class="text-decoration-none">
+                                <a href="{% url 'webapp:detailed_topic_view' topic.id %}" class="text-decoration-none">
                                     {{ topic.replies_count }}
                                 </a>
                             </td>

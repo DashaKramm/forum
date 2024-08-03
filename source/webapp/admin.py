@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from webapp.models import Topic
+from webapp.models import Topic, Reply
 
 
 # Register your models here.
@@ -13,3 +13,14 @@ class TopicAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Topic, TopicAdmin)
+
+
+class ReplyAdmin(admin.ModelAdmin):
+    list_display = ['id', 'content', 'created_at']
+    list_display_links = ['id', 'content']
+    search_fields = ['content']
+    fields = ['content', 'created_at']
+    readonly_fields = ['author', 'created_at', 'updated_at']
+
+
+admin.site.register(Reply, ReplyAdmin)

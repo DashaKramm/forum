@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>{{ topic.title }}</title>
+{% endblock %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5>{{ topic.title }}</h5>
+            <p><strong>Дата создания:</strong> {{ topic.created_at|date:"d M Y" }}</p>
+            <p><strong>Автор:</strong> <a href="#">{{ topic.author.username }}</a></p>
+        </div>
+        <div class="mb-4">
+            <h3>Оставить ответ:</h3>
+            <form action="{% url 'webapp:create_reply' topic.id %}" method="post" enctype="multipart/form-data">
+                {% include 'partial/form.html' with form=reply_form button_text='Ответить' %}
+            </form>
+        </div>
+        <div>
+            <ul class="list-unstyled">
+                {% for reply in replies %}
+                    <li class="mb-4">
+                        <div class="d-flex align-items-start border p-3">
+                            <div class="me-3 d-flex flex-column align-items-center">
+                                {% if reply.author.avatar %}
+                                    <img src="{{ reply.author.avatar.url }}" alt="{{ reply.author.username }}"
+                                         style="width: 60px; height: 60px; ;">
+                                {% endif %}
+                                <a href="#">{{ reply.author.username }}</a>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p><small>{{ reply.created_at|date:"d M Y H:i" }}</small></p>
+                                <p>{{ reply.content }}</p>
+                            </div>
+                            {% if request.user == reply.author %}
+                                <div class="ms-3">
+                                    <a href="{% url 'webapp:update_reply' reply.id %}" class="btn btn-primary btn-sm">Редактировать</a>
+                                    <a href="{% url 'webapp:delete_reply' reply.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% empty %}
+                    <p>Ответов нет</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

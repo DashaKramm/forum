@@ -1,9 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 
-from webapp.forms.topics import TopicForm
+from webapp.forms import TopicForm, ReplyForm
 from webapp.models import Topic
 
 
@@ -27,3 +27,15 @@ class CreateTopicView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('webapp:index')
+
+
+class TopicDetailView(DetailView):
+    model = Topic
+    template_name = 'topics/topic_detail.html'
+    context_object_name = 'topic'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['replies'] = self.object.replies.all().order_by('created_at')
+        context['reply_form'] = ReplyForm()
+        return context
