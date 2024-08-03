@@ -38,7 +38,7 @@
                             тему</a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link"><a href="#">{{ request.user.username }}</a></p>
+                        <p class="nav-link"><a href="{% url 'accounts:detail' user.pk %}">{{ request.user.username }}</a></p>
                     </li>
                     <li class="nav-item">
                         <form action="{% url 'accounts:logout' %}?next={{ request.get_full_path }}" method="post">

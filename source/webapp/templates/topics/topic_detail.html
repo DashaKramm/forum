@@ -7,7 +7,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h5>{{ topic.title }}</h5>
             <p><strong>Дата создания:</strong> {{ topic.created_at|date:"d M Y" }}</p>
-            <p><strong>Автор:</strong> <a href="#">{{ topic.author.username }}</a></p>
+            <p><strong>Автор:</strong> <a href="{% url 'accounts:detail' user.pk %}">{{ topic.author.username }}</a></p>
         </div>
         <div class="mb-4">
             <h3>Оставить ответ:</h3>
@@ -25,7 +25,7 @@
                                     <img src="{{ reply.author.avatar.url }}" alt="{{ reply.author.username }}"
                                          style="width: 60px; height: 60px;">
                                 {% endif %}
-                                <a href="#">{{ reply.author.username }}</a>
+                                <a href="{% url 'accounts:detail' user.pk %}">{{ reply.author.username }}</a>
                                 <p>Сообщений: {{ reply.message_count }}</p>
                             </div>
                             <div class="flex-grow-1">
